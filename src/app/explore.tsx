@@ -1,180 +1,360 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+export default function ExploreScreen() {
+  const isDark = useColorScheme() === 'dark';
 
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
+  // Demo state untuk Soal 2: Counter menggunakan useState (tambah, kurang, reset)
+  const [counter, setCounter] = useState<number>(0);
+
+  const dynamicStyles = {
+    bg: { backgroundColor: isDark ? '#101114' : '#F8F9FA' },
+    card: {
+      backgroundColor: isDark ? '#18191E' : '#FFFFFF',
+      borderColor: isDark ? '#2E3138' : '#E5E7EB',
+    },
+    textPrimary: { color: isDark ? '#FFFFFF' : '#111827' },
+    textSecondary: { color: isDark ? '#9CA3AF' : '#4B5563' },
+    codeBg: { backgroundColor: isDark ? '#23252B' : '#F3F4F6' },
+    codeText: { color: isDark ? '#A5B4FC' : '#4F46E5' },
   };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
 
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <SafeAreaView style={[styles.safeArea, dynamicStyles.bg]} edges={['top', 'left', 'right']}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Header Section */}
+        <View style={styles.header}>
+          <Text style={[styles.badge, { color: '#6366F1' }]}>
+            TUGAS PTM 5 — PEMROGRAMAN VISUAL
+          </Text>
+          <Text style={[styles.title, dynamicStyles.textPrimary]}>
+            Dokumentasi & Implementasi Hook
+          </Text>
+          <Text style={[styles.subtitle, dynamicStyles.textSecondary]}>
+            Rangkuman konsep dan verifikasi implementasi Soal 1 s.d. Soal 5 React Native & Expo.
+          </Text>
+        </View>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        {/* Card: Soal 5 Checklist Fitur */}
+        <View style={[styles.card, dynamicStyles.card]}>
+          <View style={styles.cardHeader}>
+            <View style={[styles.iconCircle, { backgroundColor: '#6366F120' }]}>
+              <Ionicons name="checkmark-done-circle" size={20} color="#6366F1" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.cardTitle, dynamicStyles.textPrimary]}>
+                Checklist Ketentuan Soal 5
+              </Text>
+              <Text style={[styles.cardSubtitle, dynamicStyles.textSecondary]}>
+                Seluruh 6 fitur dan 7 hook telah aktif
+              </Text>
+            </View>
+          </View>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.checklist}>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                1. Daftar Tugas Minimal 5 data (FlatList)
+              </Text>
+            </View>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                2. Tambah Tugas baru langsung muncul
+              </Text>
+            </View>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                3. Ubah Status (Belum Dikerjakan ⟷ Selesai)
+              </Text>
+            </View>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                4. Hapus Tugas dari daftar
+              </Text>
+            </View>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                5. Pencarian Tugas (Nama & Mata Kuliah)
+              </Text>
+            </View>
+            <View style={styles.checkItem}>
+              <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+              <Text style={[styles.checkText, dynamicStyles.textPrimary]}>
+                6. Ringkasan Tugas (Total, Tertunda, Selesai)
+              </Text>
+            </View>
+          </View>
+        </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+        {/* Card: Soal 2 Demo Counter useState */}
+        <View style={[styles.card, dynamicStyles.card]}>
+          <View style={styles.cardHeader}>
+            <View style={[styles.iconCircle, { backgroundColor: '#F59E0B20' }]}>
+              <Ionicons name="calculator-outline" size={20} color="#F59E0B" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.cardTitle, dynamicStyles.textPrimary]}>
+                Soal 2: Demo Counter (useState)
+              </Text>
+              <Text style={[styles.cardSubtitle, dynamicStyles.textSecondary]}>
+                Tombol Tambah, Kurang, dan Reset dengan State lokal
+              </Text>
+            </View>
+          </View>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.counterBox}>
+            <Text style={[styles.counterDisplay, dynamicStyles.textPrimary]}>
+              {counter}
+            </Text>
+            <Text style={[styles.counterCaption, dynamicStyles.textSecondary]}>
+              Nilai Counter State saat ini
+            </Text>
 
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+            <View style={styles.counterActionRow}>
+              <TouchableOpacity
+                style={[styles.counterBtn, { backgroundColor: '#EF4444' }]}
+                onPress={() => setCounter((prev) => prev - 1)}>
+                <Ionicons name="remove" size={18} color="#FFFFFF" />
+                <Text style={styles.counterBtnText}>Kurang</Text>
+              </TouchableOpacity>
 
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
-    </ScrollView>
+              <TouchableOpacity
+                style={[styles.counterBtn, { backgroundColor: '#6B7280' }]}
+                onPress={() => setCounter(0)}>
+                <Ionicons name="refresh" size={18} color="#FFFFFF" />
+                <Text style={styles.counterBtnText}>Reset</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.counterBtn, { backgroundColor: '#10B981' }]}
+                onPress={() => setCounter((prev) => prev + 1)}>
+                <Ionicons name="add" size={18} color="#FFFFFF" />
+                <Text style={styles.counterBtnText}>Tambah</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        {/* Card: Rangkuman 7 Hook di Aplikasi */}
+        <View style={[styles.card, dynamicStyles.card]}>
+          <View style={styles.cardHeader}>
+            <View style={[styles.iconCircle, { backgroundColor: '#8B5CF620' }]}>
+              <Ionicons name="code-slash" size={20} color="#8B5CF6" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.cardTitle, dynamicStyles.textPrimary]}>
+                Implementasi 7 Hook & Props
+              </Text>
+              <Text style={[styles.cardSubtitle, dynamicStyles.textSecondary]}>
+                Penerapan pada layar utama TaskHub Mahasiswa
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.hookList}>
+            {/* 1. Props */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#EEF2FF', color: '#4F46E5' }]}>
+                1. Props
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Komponen induk (<Text style={{ fontWeight: '600' }}>HomeScreen</Text>) mengirimkan data tugas (nama, mata kuliah, deadline, status, onToggle, onDelete) ke komponen anak (<Text style={{ fontWeight: '600' }}>TaskCard</Text>, <Text style={{ fontWeight: '600' }}>TaskSummary</Text>).
+              </Text>
+            </View>
+
+            {/* 2. useState */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#FEF3C7', color: '#B45309' }]}>
+                2. useState
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Mengelola input form (<Text style={{ fontWeight: '600' }}>taskName</Text>, <Text style={{ fontWeight: '600' }}>courseName</Text>, <Text style={{ fontWeight: '600' }}>description</Text>, <Text style={{ fontWeight: '600' }}>deadline</Text>), keyword pencarian, dan status filter tab.
+              </Text>
+            </View>
+
+            {/* 3. useEffect */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#ECFDF5', color: '#047857' }]}>
+                3. useEffect
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Memantau perubahan keyword pencarian dengan dependency array <Text style={dynamicStyles.codeText}>[searchKeyword]</Text> dan mencetak log otomatis ke <Text style={dynamicStyles.codeText}>console.log()</Text>.
+              </Text>
+            </View>
+
+            {/* 4. useMemo */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#FDF2F8', color: '#BE185D' }]}>
+                4. useMemo
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Menghitung <Text style={{ fontWeight: '600' }}>pendingTasksCount</Text>, <Text style={{ fontWeight: '600' }}>completedTasksCount</Text>, dan <Text style={{ fontWeight: '600' }}>filteredTasks</Text> secara efisien hanya ketika dependency <Text style={dynamicStyles.codeText}>[tasks]</Text> berubah.
+              </Text>
+            </View>
+
+            {/* 5. useCallback */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#EFF6FF', color: '#1D4ED8' }]}>
+                5. useCallback
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Memoisasi fungsi <Text style={{ fontWeight: '600' }}>handleAddTask</Text>, <Text style={{ fontWeight: '600' }}>handleDeleteTask</Text>, <Text style={{ fontWeight: '600' }}>handleToggleStatus</Text>, dan <Text style={{ fontWeight: '600' }}>handleResetTasks</Text> agar tidak dirender ulang secara berlebihan.
+              </Text>
+            </View>
+
+            {/* 6. useRef */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#FFF7ED', color: '#C2410C' }]}>
+                6. useRef
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Menyimpan referensi ke TextInput nama tugas (<Text style={dynamicStyles.codeText}>taskNameInputRef</Text>). Setelah tugas berhasil ditambahkan, fokus diarahkan kembali via <Text style={dynamicStyles.codeText}>focus()</Text>.
+              </Text>
+            </View>
+
+            {/* 7. useReducer */}
+            <View style={styles.hookItem}>
+              <Text style={[styles.hookBadge, { backgroundColor: '#F3E8FF', color: '#7E22CE' }]}>
+                7. useReducer
+              </Text>
+              <Text style={[styles.hookDesc, dynamicStyles.textSecondary]}>
+                Mengelola state array tugas dengan action: <Text style={dynamicStyles.codeText}>ADD_TASK</Text>, <Text style={dynamicStyles.codeText}>DELETE_TASK</Text>, <Text style={dynamicStyles.codeText}>TOGGLE_STATUS</Text>, dan <Text style={dynamicStyles.codeText}>RESET_TASKS</Text>.
+              </Text>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  safeArea: {
     flex: 1,
   },
-  contentContainer: {
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 100,
+    gap: 16,
+  },
+  header: {
+    gap: 6,
+    paddingVertical: 8,
+  },
+  badge: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  subtitle: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  card: {
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+    gap: 14,
+  },
+  cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
-  },
-  titleContainer: {
-    gap: Spacing.three,
     alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+    gap: 12,
   },
-  centerText: {
-    textAlign: 'center',
+  iconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  pressed: {
-    opacity: 0.7,
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
   },
-  linkButton: {
+  cardSubtitle: {
+    fontSize: 12,
+  },
+  checklist: {
+    gap: 10,
+  },
+  checkItem: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
     alignItems: 'center',
+    gap: 10,
   },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
+  checkText: {
+    fontSize: 13,
+    fontWeight: '500',
+    flex: 1,
   },
-  collapsibleContent: {
+  counterBox: {
     alignItems: 'center',
+    paddingVertical: 12,
+    gap: 8,
   },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
+  counterDisplay: {
+    fontSize: 48,
+    fontWeight: '900',
+    letterSpacing: -1,
   },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+  counterCaption: {
+    fontSize: 12,
+    marginBottom: 6,
+  },
+  counterActionRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  counterBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  counterBtnText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  hookList: {
+    gap: 14,
+  },
+  hookItem: {
+    gap: 4,
+  },
+  hookBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    fontSize: 11.5,
+    fontWeight: '700',
+    overflow: 'hidden',
+  },
+  hookDesc: {
+    fontSize: 12.5,
+    lineHeight: 18,
   },
 });
